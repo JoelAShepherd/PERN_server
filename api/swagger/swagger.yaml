@@ -1,0 +1,279 @@
+swagger: "2.0"
+info:
+  version: "1.0.0"
+  title: PERN store API
+host: localhost:5000
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+
+produces:
+  - application/json
+paths:
+  /products:
+    get:
+      description: Returns array of products from the database
+      responses:
+        "200":
+          description: Successfully obtained array of products
+          schema:
+            $ref: "#/definitions/productsArray"
+        "500":
+          description: Failed to get products from database
+          schema:
+            type: string
+            
+  /auth/register:
+    post:
+      description: User submits username and password to create new account
+      parameters:
+        - name: name
+          in: query
+          description: The name of the user
+          required: true
+          type: string
+        - name: email
+          in: query
+          description: The email of the user
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The password for the user
+          required: true
+          type: string
+      responses:
+        "200": 
+          description: User successfully registers new account
+          schema:
+            $ref: "#/definitions/tokenAsJSON"
+        "401":
+          description: User already exists in database
+          schema:
+            $ref: "#/definitions/errorMsg"
+        "500":
+          description: Error connecting to database
+          schema:
+            type: string
+          
+  /auth/login:
+    post:
+      description: User submits info to log into account
+      parameters:
+        - name: email
+          in: query
+          description: The email of the user
+          required: true
+          type: string
+        - name: password
+          in: query
+          description: The password of the user
+          required: true
+          type: string
+      responses:
+        "200": 
+          description: User successfully logged in
+          schema:
+            $ref: "#/definitions/tokenAsJSON"
+        "401":
+          description: User provided incorrect email or password
+          schema:
+            $ref: "#/definitions/errorMsg"
+        "500":
+          description: Error connecting to the database
+          schema:
+            type: string
+  
+  /auth/verify:
+    get:
+      description: Checks validity of existing JWT on page load
+      parameters:
+        - name: token
+          in: header
+          description: JWT token from the browser
+          required: true
+          type: string
+      responses:
+        "200":
+          description: JWT checked and is valid
+          schema:
+            $ref: "#/definitions/validationAsJSON"
+        "403":
+          description: Invalid JWT
+          schema:
+            $ref: "#/definitions/errorMsg"
+        "500":
+          description: server error
+          schema:
+            type: string
+          
+  /dashboard:
+    get:
+      description: Get username from database using JWT
+      parameters:
+        - name: token
+          in: query
+          description: JWT token from the browser
+          required: true
+          type: string
+      responses:
+        "200":
+          description: JWT checked and is valid, username returned
+          schema:
+            type: object
+            properties:
+              user_name:
+                type: string
+        "401":
+          description: Invalid JWT
+          schema:
+            $ref: "#/definitions/errorMsg"
+      
+  /dashboard/orders:
+    get:
+      description: Get orders from database using JWT
+      parameters:
+        - name: token
+          in: header
+          description: JWT token from the browser
+          required: true
+          type: string
+      responses:
+        "200":
+          description: JWT checked and is valid, user orders returned
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                order_id:
+                  type: integer
+                json_items_ordered:
+                  type: object
+                  properties:
+                    items:
+                      type: array
+                      items: 
+                        type: object
+                        properties:
+                          product_id:
+                            type: integer
+                          product_name:
+                            type: string
+                          quantity:
+                            type: integer
+                order_date: 
+                  type: string
+                cost: 
+                  type: integer
+                order_status:
+                  type: string
+                
+        "401":
+          description: Invalid JWT
+          schema:
+            $ref: "#/definitions/errorMsg"
+          
+  /pay:
+    post:
+      description: Process demo payment using Stripe and add it to the database
+      parameters:
+        - name: amount
+          in: header
+          description: Amount to be charged in the transaction
+          required: true
+          type: string
+        - name: id
+          in: header
+          description: Payment method for the Stripe middleware
+          required: true
+          type: string
+        - name: order
+          in: header
+          description: String JSON of the order to be placed in the database
+          required: true
+          type: string
+        - name: orderdate
+          in: header
+          description: String date for entry in to the database
+          required: true
+          type: string
+        - name: user_id
+          in: query
+          description: User ID for the order for entry into the database
+          required: true
+          type: string
+      responses:
+        "200":
+          description: Payment successfully processed and order added to the database
+          schema:
+            $ref: "#/definitions/paymentResponse"
+        "400":
+          description: Payment failed, order not added to the database
+          schema:
+            $ref: "#/definitions/paymentResponse"
+        
+definitions:
+  productsArray:
+    required:
+      - array
+    properties:
+      array:
+        type: array
+        items: 
+          type: object
+          properties:
+            product_id:
+              type: integer
+            name:
+              type: string
+            unit_price:
+              type: string
+            in_stock:
+              type: integer
+            description:
+              type: string
+  errorMsg:
+    type: object
+    properties:
+      errorMsg:
+        type: string
+            
+  tokenAsJSON:
+    required:
+      - token
+    properties:
+      token:
+        type: object
+        properties:
+          token:
+            type: string
+  
+  validationAsJSON:
+    properties:
+      validated:
+        type: object
+        properties: 
+          validated:
+            type: boolean
+      
+  paymentResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        success:
+          type: boolean
+        
+      
+      
+      
+      
+      
+      
+      
+      
+        
+        
