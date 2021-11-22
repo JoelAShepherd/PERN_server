@@ -41,9 +41,7 @@ app.get('/', (req, res) =>{
 console.log("PROCESS: ", process.env.NODE_ENV)
 
 app.get('/test', (req, res) => {
-    res.json({
-        test: test1
-    })
+    res.send("This is a test")
 })
 
 //GET products info
