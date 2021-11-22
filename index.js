@@ -5,7 +5,7 @@ const pool = require('./database/db');
 const morgan = require('morgan')
 const helmet = require('helmet')
 const passport = require('passport');
-const cookieSession = require('cookie-session')
+const path = require('path')
 require('dotenv').config();
 
 
@@ -32,6 +32,11 @@ app.use('/auth', authRoutes);
 app.use('/dashboard', dashboard);
 app.use('/pay', paymentRoutes);
 app.use('/public', express.static('public/images'))
+
+
+app.get('/', (req, res) =>{
+    res.sendFile(path.join(__dirname, '/index.html'));
+})
 
 
 //GET products info
