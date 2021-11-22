@@ -40,6 +40,12 @@ app.get('/', (req, res) =>{
 
 console.log("PROCESS: ", process.env.NODE_ENV)
 
+app.get('/test', (req, res) => {
+    res.json({
+        test: test1
+    })
+})
+
 //GET products info
 app.get('/products', async(req, res) => {
     
