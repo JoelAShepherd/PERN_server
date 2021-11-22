@@ -38,6 +38,7 @@ app.get('/', (req, res) =>{
     res.sendFile(path.join(__dirname, '/index.html'));
 })
 
+console.log("PROCESS: ", process.env.NODE_ENV)
 
 //GET products info
 app.get('/products', async(req, res) => {
