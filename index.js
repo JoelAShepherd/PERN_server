@@ -34,9 +34,14 @@ app.use('/pay', paymentRoutes);
 app.use('/public', express.static('public/images'))
 
 
-app.get('/', (req, res) =>{
-    res.sendFile(path.join(__dirname, '/index.html'));
-})
+if (process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "PERN_E-Commerce/dir")))
+
+} else {
+    app.get('/', (req, res) =>{
+        res.sendFile(path.join(__dirname, '/index.html'));
+    })
+}
 
 console.log("PROCESS: ", process.env.NODE_ENV)
 
