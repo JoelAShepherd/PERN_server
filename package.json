@@ -10,7 +10,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "heroku-postbuild": "cd PERN_E-Commerce && npm install && npm install -D webpack-cli && npm run build"
+    "heroku-postbuild": "cd PERN_E-Commerce && npm install && npm install webpack-cli && npm run build"
   },
   "author": "",
   "license": "ISC",
