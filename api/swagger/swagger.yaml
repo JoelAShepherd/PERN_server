@@ -2,10 +2,10 @@ swagger: "2.0"
 info:
   version: "1.0.0"
   title: PERN store API
-host: localhost:5000
+host: pern-webapp-server.herokuapp.com
 basePath: /
 schemes:
-  - http
+  - https
 consumes:
   - application/json
 
