@@ -20,7 +20,12 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 app.use(morgan('dev'))
-app.use(helmet())
+app.use(helmet({contentSecurityPolicy: {
+    useDefaults: false,
+    directives: {
+        "script-src": ["'self'", "https://js.stripe.com/"]
+    }
+}}))
 
 
 
