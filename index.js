@@ -25,7 +25,7 @@ app.use(helmet({contentSecurityPolicy: {
     directives: {
         defaultSrc: ["'self'", "'unsafe-inline'"],
         "script-src": ["'self'", "https://js.stripe.com/"],
-        "style-src": ["'self'", "https://fonts.googleapis.com/"] 
+        "style-src": ["'self'", "*"] 
     }
 }}))
 
