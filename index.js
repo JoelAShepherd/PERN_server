@@ -23,6 +23,7 @@ app.use(morgan('dev'))
 app.use(helmet({contentSecurityPolicy: {
     useDefaults: false,
     directives: {
+        defaultSrc: ["'self'"],
         "script-src": ["'self'", "https://js.stripe.com/"]
     }
 }}))
